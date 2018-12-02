@@ -7,7 +7,6 @@ print('Inicializando game...')
 # Definindo as configurações de FPS
 hertz = 60  # Taxa de atualização da tela em ciclos por segundo
 fps_clock = pygame.time.Clock()
-delta_time = 0 # Tempo em milisegundos desde o último tick de Clock 
 
 # Definindo as configurações da janela
 window_size = (640, 480)
@@ -34,9 +33,11 @@ dots_rect = dots_surface.get_rect()
 dots_rect.centerx = text_rect.left + text_rect.width
 dots_rect.centery = text_rect.centery
 
+# Setando o temporizador
+pygame.time.set_timer(USEREVENT, 1000) # Cria um temporizador de 1 segundo
+
 print('Nosso game começou!')
 is_running = True
-
 
 while is_running:  # Loop principal
     ######################
@@ -45,18 +46,16 @@ while is_running:  # Loop principal
     for event in pygame.event.get():
         if event.type == QUIT:
             is_running = False
+        elif event.type == USEREVENT:
+            dots = dots+'.'
+            if len(dots) > 3:
+                dots='.'
 
     ############################
     # Atualização de Variáveis #
     ############################
-    delta_time += fps_clock.get_time()
-    if delta_time > 1000:
-        delta_time = 0
-        dots = dots+'.'
-        if len(dots) > 3:
-            dots='.'
     dots_surface = font_obj.render(dots, True, fg_color, bg_color) 
-    
+    # Limpe a tela e escreva os textos
     greetings_surface.fill(bg_color)
     greetings_surface.blit(text_surface, text_rect)
     greetings_surface.blit(dots_surface, dots_rect)
